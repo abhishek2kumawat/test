@@ -1,1 +1,154 @@
 
+
+@extends('user-layouts.app')
+@section('content')
+@php
+use App\Models\User;
+  $user = auth()->user();
+  $data = User::where('id',$user->id)->get()->first();
+//   dd($data);
+@endphp
+		<div class="container-fluid page-body-wrapper">
+			<div class="main-panel">
+				<div class="content-wrapper">
+					<div class="page-header">
+						<h3 class="page-title">
+							<span class="page-title-icon bg-gradient-primary text-white mr-2">
+								<img src="{{ url('public/userpanel/assets/img/referral-1.png') }}" style="height: 16px; width:16px; margin-top: 10px;">
+							</span>Referrals
+						</h3>
+						<nav aria-label="breadcrumb">
+							<ul class="breadcrumb">
+								<li class="breadcrumb-item active" aria-current="page">
+									<span></span><b>Referral Link: <a href="#" id="textToCopy">{{ url('/') }}/register2/{{ $data->invcode }}</a></b> &nbsp; 
+										<a  id="copyButton"><i
+												class="mdi mdi-content-copy menu-icon"></i></a><span id="copyResult"></span>
+								</li>
+							</ul>
+						</nav>
+					</div>
+
+					<div class="row">
+
+						<div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 stretch-card grid-margin">
+							<div class="card bg-gradient-primary card-img-holder text-white">
+								<div class="card-body box">
+									<img src="{{ url('public/userpanel/assets/img/circle.svg') }}" class="card-img-absolute" alt="circle-image" />
+									<h4 class="font-weight-normal mb-3">Daily Earning <i
+											class="mdi mdi-chart-line mdi-24px float-right"></i>
+									</h4>
+									<h4 class="mb-3"><b>₹{{ number_format($today,2)}}</b></h4>
+									{{-- <h5 class="card-text">Daily Referrals Amount</h5> --}}
+								</div>
+							</div>
+						</div>
+						<div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 stretch-card grid-margin">
+							<div class="card bg-gradient-dark card-img-holder text-white">
+								<div class="card-body box">
+									<img src="{{ url('public/userpanel/assets/img/circle.svg') }}" class="card-img-absolute" alt="circle-image" />
+									<h4 class="font-weight-normal mb-3">Weekly Earning <i
+											class="mdi mdi-chart-line mdi-24px float-right"></i>
+									</h4>
+									<h4 class="mb-3"><b>₹{{ number_format($week,2)}}</b></h4>
+									{{-- <h5 class="card-text">Weekly Referrals Amount</h5> --}}
+								</div>
+							</div>
+						</div>
+						<div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 stretch-card grid-margin">
+							<div class="card bg-gradient-success card-img-holder text-white">
+								<div class="card-body box">
+									<img src="{{ url('public/userpanel/assets/img/circle.svg') }}" class="card-img-absolute" alt="circle-image" />
+									<h4 class="font-weight-normal mb-3">Month Earning <i
+											class="mdi mdi-chart-line mdi-24px float-right"></i>
+									</h4>
+									<h4 class="mb-3"><b>₹{{ number_format($month,2)}}</b></h4>
+									{{-- <h5 class="card-text">Month Referrals Amount</h5> --}}
+								</div>
+							</div>
+						</div>
+						<div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 stretch-card grid-margin">
+							<div class="card bg-gradient-info card-img-holder text-white">
+								<div class="card-body box">
+									<img src="{{ url('public/userpanel/assets/img/circle.svg') }}" class="card-img-absolute" alt="circle-image" />
+									<h4 class="font-weight-normal mb-3">Total Earning <i
+											class="mdi mdi-bookmark-outline mdi-24px float-right"></i>
+									</h4>
+									<h4 class="mb-3"><b>₹{{ Number_format($total,2)}}</b></h4>
+									{{-- <h5 class="card-text">Total Referrals Amount</h5> --}}
+								</div>
+							</div>
+						</div>
+
+					</div>
+
+					<div class="container-fluid">
+						<div class="row column_title">
+							<div class="col-md-12">
+								<div class="page_title">
+									<h4>Rewards</h4>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<table class="table">
+						<thead>
+							<tr class="filters">
+								<th>Categories
+									<select id="category-filter" class="form-control" style="margin-top: 8px;">
+										<option>None</option>
+										<option value="sliver">sliver</option>
+										<option value="gold">gold</option>
+										<option value="diamond">diamond</option>
+										<option value="platinum">platinum</option>
+									</select>
+								</th>
+							</tr>
+						</thead>
+					</table>
+
+					<table id="example1" class="table table-bordered table-striped">
+						<thead>
+							<tr>
+								<th>Id</th>
+								<th>From</th>
+								<th>Courses Price</th>
+								<th>Amount</th>
+								<th>Category</th>
+								<th>Received On</th>
+								<th>Status</th>
+								
+							</tr>
+						</thead>
+						<tbody>
+							
+							@foreach ($ref as $item)
+							<tr id="task-1" class="task-list-row" data-task-id="1" data-user="{{$item->paln_name}}">
+								<td>{{$loop->iteration}}</td>
+								<td>MLM</td>
+								<td>₹{{$item->plan_amount}}/-</td>
+								<td>₹{{$item->receive_amount}}/-</td>
+								<td class=" text-capitalize">{{$item->paln_name}}</td>
+								<td>{{ date('d M, Y', strtotime($item->created_at)) }}</td>
+								<td class="text-success">Verified</td>
+							</tr>
+							@endforeach
+							{{-- <tr id="task-12" class="task-list-row" data-task-id="2" data-user="Silver">
+								<td>10853</td>
+								<td>-</td>
+								<td>4,308.13 INR</td>
+								<td>MLM</td>
+								<td>Silver</td>
+								<td>-</td>
+								<td>From Johny Toe</td>
+								<td>May 22, 2022 6:15 pm</td>
+								<td>Unverified</td>
+							</tr> --}}
+
+
+						</tbody>
+					</table>
+
+				</div>
+				<!-- content-wrapper ends -->
+@endsection
